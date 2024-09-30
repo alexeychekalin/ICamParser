@@ -30,8 +30,8 @@ namespace ICamParser
 
         private void button4_Click(object sender, EventArgs e)
         {
-            _answer = "PAPA303000011013005006005007000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000002000000000000000000000000000001001000000000000000000000000031014000000000000000000000000000000000000000000000000000000023045014000000000000000000000023000000000001031014002000000082}290007A/";
-            richTextBox1.Text = _answer;
+            //_answer = "PAPA303000032010081003000007000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001000000000000000000000000000000000000000000000000000000000017010000000000000000000000000000000000000000000000000000000129027000000000000000000000000129000000000000017010001000000155Ќ9900084/";
+            _answer = richTextBox1.Text;
             var status = _answer.Substring(7, 3);
             label5.Text = status == "000" ? "Рабоает" : "Стоит";
 
@@ -42,12 +42,14 @@ namespace ICamParser
 
         private void button5_Click(object sender, EventArgs e)
         {
+            _answer = richTextBox1.Text;
             var sentences = Split(_answer.Substring(7, _answer.Length-16), 3).ToList();
             cej = Convert.ToInt32(sentences[82]) + Convert.ToInt32(sentences[83]) + Convert.ToInt32(sentences[84]) + Convert.ToInt32(sentences[91]);
 
-            var cpa_seq = _answer.Substring(_answer.Length - 9, 3);
-            int cpa_symbol = cpa_seq[0];
-            cpa = Convert.ToInt32((cpa_symbol - 48).ToString() + cpa_seq[1] + cpa_seq[2]);
+            byte[] res = System.Text.Encoding.Default.GetBytes(_answer.Substring(_answer.Length - 9, 1));
+            int first = (int)res[0] - 48;
+            int second = Convert.ToInt32(_answer.Substring(_answer.Length - 8, 2));
+            cpa = Math.Abs(first * 100 + second);
 
             ces = 0;
 
